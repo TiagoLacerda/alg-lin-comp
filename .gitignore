@@ -1,0 +1,85 @@
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# JUCE build folders
+Builds/
+
+# CMake
+build/
+build*/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+compile_commands.json
+
+# Visual Studio
+.vs/
+*.VC.db
+*.VC.opendb
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Xcode
+DerivedData/
+*.xcworkspace
+xcuserdata/
+*.xcuserstate
+
+# CLion / JetBrains
+.idea/
+
+# VS Code
+.vscode/
+
+# Binary outputs
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+*.app
+*.vst3
+*.component
+*.au
+*.pkg
+
+# Debug / Release folders
+Debug/
+Release/
+bin/
+Bin/
+out/
+Out/
+
+# Pluginval
+pluginval.settings
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Crash dumps
+*.dmp
+
+# Generated plugin artifacts
+JuceLibraryCode/
+
+# Optional: keep if using Projucer-generated code
+# !JuceLibraryCode/BinaryData.cpp
+# !JuceLibraryCode/BinaryData.h
+
+./Builds

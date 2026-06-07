@@ -1,0 +1,46 @@
+\input{preamble}
+\begin{document}
+
+\title{
+Trabalho de Álgebra Linear Computacional \hspace{2.0ex} 26.1\\
+\textit{Pitch Shifting} em Tempo Real com STFT e \textit{Phase Vocoder}
+}
+
+\author{
+    Tiago Maia de Lacerda Brasil\inst{1}
+}
+
+\address{
+    %---------------------------------------------------------------
+    Instituto de Computação -- Universidade Federal Fluminense (UFF)\\
+    Niterói -- RJ -- Brasil -- 24210-346
+    \email{tiagomlbrasil@gmail.com}
+    %---------------------------------------------------------------
+}
+\maketitle
+
+\begin{abstract}
+    Este trabalho apresenta o desenvolvimento de um plugin de \textit{pitch shifting} em tempo real baseado na Transformada de Fourier de Curta Duração (STFT) e em técnicas de phase vocoder. O algoritmo foi implementado em C++17 utilizando o framework JUCE no formato VST3.
+
+    São discutidos os fundamentos teóricos relacionados à análise de sinais no domínio das frequências e as principais decisões de implementação adotadas no desenvolvimento do algoritmo, incluindo processamento por quadros, estimação de frequências instantâneas e reconstrução temporal do sinal.
+
+    Por fim, são apresentadas algumas limitações práticas da abordagem utilizada e possíveis extensões baseadas em técnicas descritas na literatura.
+\end{abstract}
+
+\noindent\textit{\textbf{Keywords}}: processamento digital de sinais, STFT, \textit{phase vocoder}, \textit{pitch shifting}, áudio em tempo real
+
+% Nosso objetivo final é construir um programa que altera o tom de um sinal de áudio. Queremos ser capazes de operar no espaço de frequencias, e para isso existe a transformada de Fourier. Mas ela espera um sinal periodico, e queremos operar em tempo real. Entao usamos curtas janelas de analálise. Mas isso gera artefatos nas bordas. Entao misturamos janelas consecutivas com uma função que amortece a transição entre as janelas <comentar sobre a necessidade de uma normalizacao, a ser calculada dependendo da funcao de windowing e pela forma como ocorre o overlap>. Otimo, conseguimos operar nas frequencias em tempo real, mas o som está horrível <Explicar spectral leakage e introduzir o conceito de phase vocoder>. Conseguimos transformar o sinal no espaço de frequencias e de volta no tempo sem grandes artefatos, mas ainda nao fizemos nada de pitch shifting. <Definir uma oitava, semitons e que podemos subir ou descer uma oitava de uma nota multiplicando sua frequencia por uma certa potencia de 2>. Entao, tendo em maos quantos semitons queremos shiftar, podemos calcular um novo espectro de frequencias onde cada banda de frequencia do sinal original está movida por um fator 2^(semitons/12) e interpolar nas k bins de frequencia suportadas pela nossa janela da fft, mas isso pode estar fora do limite representável pela nossa janela da FFT (shift up), ou ainda moverem todos para uma região muito pequena e causar um embaralhamento das frequencias (shift down).
+
+%<Em momento oportuno, solidificar os conceitos de overlap-add, análise e síntese, ring buffers, e comentar a latencia inerente ao phase-vocoder, onde uma primeira janela precisa ser montada, atrasando o sinal pelo tamanho da janela>
+
+\input{sections/intro}
+\input{sections/fundamentacao}
+\input{sections/metodologia}
+\input{sections/resultados}
+\input{sections/conclusao}
+
+\section*{Código}\label{sec:codigo}
+O código que acompanha este relatório pode ser encontrado neste repositório:\\ \textbf{https://github.com/TiagoLacerda/alg-lin-comp}
+
+\bibliography{refs}
+\end{document}

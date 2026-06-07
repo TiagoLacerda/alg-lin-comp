@@ -1,0 +1,125 @@
+\section{Fundamentação teórica}\label{sec:fundamentacao}
+
+\subsection{Representação Espectral de Sinais}
+
+Sinais de áudio são tradicionalmente representados no domínio do tempo, onde cada amostra descreve a amplitude do sinal em um determinado instante. Essa representação é adequada para captura, armazenamento e reprodução do áudio, mas nem sempre é a forma mais conveniente para analisar determinadas características do sinal ou realizar modificações específicas.
+
+Uma representação alternativa consiste em descrever o sinal no domínio das frequências. Nesse contexto, o sinal passa a ser interpretado como uma combinação de diversas componentes senoidais com diferentes amplitudes, frequências e fases \cite{oppenheim1999}. Essa abordagem permite identificar de maneira mais direta o conteúdo espectral presente no áudio e facilita operações relacionadas à manipulação de frequências.
+
+Diversas técnicas de processamento digital de sinais utilizam representações espectrais para realizar tarefas como filtragem, remoção de ruído, análise de conteúdo harmônico e alteração de características como tom e timbre. No caso deste trabalho, a representação no domínio das frequências é particularmente relevante por permitir a implementação de algoritmos de \textit{pitch shifting}, nos quais as componentes espectrais do sinal são deslocadas de forma controlada para produzir alterações no tom percebido do som.
+
+\subsection{Transformada Discreta de Fourier}
+
+A representação espectral de um sinal discreto pode ser obtida por meio da Transformada Discreta de Fourier (DFT, do inglês \textit{Discrete Fourier Transform}). Essa transformação converte um conjunto finito de amostras no domínio do tempo em uma representação equivalente no domínio das frequências, permitindo identificar quais componentes senoidais contribuem para a formação do sinal analisado.
+
+Matematicamente, a DFT de uma sequência discreta \(x[n]\) de comprimento \(N\) é definida por
+
+\begin{equation}
+X[k] = \sum_{n=0}^{N-1} x[n] e^{-j\frac{2\pi}{N}kn},
+\end{equation}
+
+onde \(X[k]\) representa o coeficiente espectral associado ao índice \(k\). Cada coeficiente complexo contém informações sobre a magnitude e a fase de uma determinada componente de frequência presente no sinal.
+
+A resolução espectral obtida pela DFT depende do número de amostras analisadas. Para uma frequência de amostragem \(f_s\), os coeficientes espectrais correspondem a frequências igualmente espaçadas por
+
+\begin{equation}
+\Delta f = \frac{f_s}{N}.
+\end{equation}
+
+Essas posições discretas no espectro são frequentemente denominadas \textit{bins}. Cada \textit{bin} representa uma faixa de frequências centrada em um valor específico, permitindo descrever o conteúdo espectral do sinal de forma discreta.
+
+Embora a DFT forneça uma representação completa do conteúdo espectral de um conjunto de amostras, seu custo computacional cresce quadraticamente com o tamanho do sinal. Em aplicações de processamento de áudio em tempo real, esse custo pode se tornar proibitivo, motivando o uso de algoritmos mais eficientes para seu cálculo.
+
+\subsection{Transformada Rápida de Fourier}
+
+A Transformada Rápida de Fourier (FFT, do inglês \textit{Fast Fourier Transform}) consiste em uma família de algoritmos capazes de calcular a DFT de forma mais eficiente. Diferentemente da DFT, que requer um número de operações proporcional a \(N^2\), algoritmos FFT reduzem essa complexidade para \(N \log_2 N\), tornando viável a análise espectral de sinais extensos e aplicações de processamento em tempo real.
+
+A redução do custo computacional é obtida pela exploração de simetrias e redundâncias presentes nos coeficientes da DFT. Em particular, algoritmos do tipo Cooley-Tukey dividem recursivamente o problema original em transformadas menores, combinando posteriormente os resultados para obter o espectro completo do sinal.
+
+Embora a FFT produza exatamente os mesmos coeficientes espectrais que a DFT, sua eficiência computacional tornou seu uso praticamente universal em aplicações de processamento digital de sinais. No contexto deste trabalho, a FFT é empregada tanto na etapa de análise espectral quanto na reconstrução do sinal por meio da transformada inversa.
+
+\subsection{Transformada de Fourier de Curta Duração}
+
+A DFT fornece uma representação espectral de um conjunto finito de amostras. No entanto, ao analisar todas as amostras simultaneamente, perde-se a informação sobre em que instante cada componente espectral ocorre no sinal.
+
+Além disso, em aplicações de áudio em tempo real não é possível aguardar a captura completa do sinal antes de realizar seu processamento. Torna-se necessário analisar e transformar pequenas porções do áudio à medida que novas amostras são recebidas.
+
+A Transformada de Fourier de Curta Duração (STFT, do inglês \textit{Short-Time Fourier Transform}) baseia-se nesse princípio \cite{oppenheim1999}. O sinal é dividido em segmentos de curta duração, denominados quadros (\textit{frames}), e uma transformada é aplicada individualmente a cada um deles.
+
+O resultado é uma sequência de espectros capaz de descrever a evolução temporal das frequências que compõem o sinal, estabelecendo uma representação simultânea nos domínios do tempo e da frequência.
+
+\subsection{Reconstrução Temporal}
+
+% TODO: Revisar a escrita desta seção
+
+A segmentação de um sinal em quadros sucessivos permite realizar análises localizadas no tempo, mas introduz um novo desafio. Ao extrair um trecho finito de um sinal contínuo, criam-se descontinuidades artificiais nas extremidades do quadro analisado.
+
+Essas descontinuidades podem introduzir componentes espectrais que não estavam presentes no sinal original, fenômeno conhecido como \textit{spectral leakage}. Como consequência, a energia associada a uma determinada frequência deixa de permanecer concentrada em uma única região do espectro e passa a se distribuir entre múltiplos \textit{bins}, dificultando a análise e o processamento do sinal.
+
+Uma forma de reduzir esse efeito consiste em multiplicar cada quadro por uma função de janela antes da aplicação da transformada. Essa operação atenua gradualmente as amplitudes próximas às extremidades do segmento, reduzindo as descontinuidades introduzidas pelo recorte temporal.
+
+Entretanto, o janelamento modifica a amplitude do sinal analisado, tornando inadequada a simples concatenação dos quadros reconstruídos. Para preservar a continuidade temporal e a amplitude original do sinal, os quadros sintetizados são parcialmente sobrepostos e posteriormente somados por meio da técnica de \textit{overlap-add} \cite{griffin1984}.
+
+\subsection{Magnitude e Fase no Domínio Espectral}
+
+Os coeficientes produzidos pela DFT são valores complexos que podem ser representados em termos de magnitude e fase. A magnitude está associada à intensidade de uma determinada componente espectral, enquanto a fase descreve sua posição relativa no tempo.
+
+Em muitas aplicações, a magnitude fornece informações suficientes para caracterizar aspectos importantes do sinal, como a distribuição de energia entre diferentes frequências. Entretanto, a reconstrução do sinal original a partir de sua representação espectral depende tanto da magnitude quanto da fase de cada componente \cite{dolson1986}. Alterações arbitrárias nas fases espectrais podem modificar significativamente a forma de onda resultante, mesmo quando as magnitudes permanecem inalteradas. Em sinais de áudio, esse tipo de alteração pode resultar em transientes menos definidos e em artefatos perceptíveis, frequentemente descritas como sons metálicos, artificiais ou vazios \cite{laroche1999}.
+
+% TODO: Revisar a descrição dos artefatos de áudio acima
+
+Embora alterações inadequadas de fase possam produzir resultados indesejados, a fase constitui uma propriedade fundamental do sinal. Efeitos de áudio como \textit{phasers} e \textit{flangers} exploram deliberadamente relações de fase para produzir características sonoras específicas. Assim, o objetivo não é eliminar a informação de fase, mas preservá-la ou manipulá-la de forma controlada.
+
+Na STFT, cada componente espectral é observada ao longo de uma sequência de quadros consecutivos. A variação de fase entre essas observações contém informações sobre a evolução temporal do sinal e permite estimar com maior precisão a frequência associada a cada componente espectral. Técnicas capazes de explorar essa informação durante os processos de análise e síntese são conhecidas como \textit{phase vocoders}.
+
+\subsection{\textit{Phase vocoders}}
+
+Cada \textit{bin} da STFT possui uma magnitude e uma fase associadas. Para uma senoide cuja frequência coincide exatamente com a frequência central de um \textit{bin}, a evolução da fase entre quadros consecutivos pode ser prevista a partir da frequência da senoide e do intervalo temporal entre análises.
+
+Nesse caso, o avanço de fase esperado entre dois quadros consecutivos é dado por
+
+\begin{equation}
+\Delta\phi_{esp}
+=
+2\pi k \frac{H}{N},
+\end{equation}
+
+onde \(k\) representa o índice do \textit{bin}, \(H\) o passo entre análises (\textit{hop size}) e \(N\) o tamanho da transformada.
+
+Entretanto, sinais reais raramente apresentam componentes perfeitamente alinhadas às frequências centrais da transformada. Além disso, efeitos como o \textit{spectral leakage} fazem com que a energia de uma componente seja distribuída entre múltiplos \textit{bins}. Como consequência, a variação de fase observada nem sempre corresponde ao avanço esperado para a frequência central do \textit{bin}.
+
+A diferença entre o avanço de fase observado
+
+\begin{equation}
+\Delta\phi_{obs}
+=
+\phi_m - \phi_{m-1},
+\end{equation}
+
+e o avanço esperado contém informações sobre a frequência efetiva da componente analisada. A partir dessa diferença, é possível estimar uma frequência mais precisa do que aquela fornecida apenas pela posição do \textit{bin} na transformada. A frequência angular instantânea pode ser estimada \cite{dolson1986} por
+
+\begin{equation}
+\omega_{inst}
+=
+\frac{2\pi k}{N}
++
+\frac{\Delta\phi_{obs}-\Delta\phi_{esp}}{H}.
+\end{equation}
+
+A análise da evolução temporal das fases, a estimação das frequências efetivas das componentes espectrais e a posterior reconstrução coerente do sinal constituem os princípios fundamentais do \textit{phase vocoder} \cite{flanagan1966,dolson1986}. Essa abordagem permite manipular componentes espectrais preservando relações temporais importantes do sinal, servindo como base para aplicações de \textit{time stretching} e \textit{pitch shifting}.
+
+\subsection{\textit{Pitch shifting}}
+
+Uma oitava corresponde ao intervalo entre duas notas cujas frequências diferem por um fator de dois. Dessa forma, uma nota com frequência \(f\) possui sua oitava superior em \(2f\) e sua oitava inferior em \(f/2\).
+
+No sistema de doze temperamentos iguais, predominante na música contemporânea, a oitava é dividida em doze semitons igualmente espaçados. Nessa convenção, um deslocamento de \(s\) semitons corresponde à razão de frequências
+
+\begin{equation}
+r = 2^{s/12}.
+\end{equation}
+
+Assim, aumentar o tom percebido de um sinal em \(s\) semitons equivale a multiplicar suas frequências por \(2^{s/12}\), enquanto reduzi-la equivale à aplicação do mesmo fator para valores negativos de \(s\).
+
+Uma vez obtida uma representação espectral composta por magnitudes e frequências estimadas pelo \textit{phase vocoder}, o processo de \textit{pitch shifting} consiste em reposicionar essas componentes espectrais segundo a razão desejada. Como as novas frequências raramente coincidem exatamente com as posições discretas dos \textit{bins} da transformada, torna-se necessário estimar sua contribuição para o espectro sintetizado por meio de técnicas de interpolação.
+
+Dessa forma, a combinação entre a análise espectral fornecida pela STFT, a estimação de frequência realizada pelo \textit{phase vocoder} e o reposicionamento das componentes espectrais permite alterar o tom percebido de um sinal preservando sua duração temporal original.

@@ -1,0 +1,12 @@
+\section{Introdução}\label{sec:intro}
+
+O processamento digital de sinais de áudio está presente em diversas aplicações modernas, incluindo sistemas multimídia, ferramentas de produção musical e efeitos sonoros em tempo real. Nesse contexto, técnicas de análise no domínio das frequências permitem modificar diferentes características do sinal, como timbre, conteúdo harmônico e tom.
+
+Entre essas aplicações, algoritmos de \textit{pitch shifting} permitem alterar o tom percebido de um sinal sem modificar significativamente sua duração temporal. Uma das abordagens mais utilizadas para esse tipo de processamento baseia-se na Transformada de Fourier de Curta Duração (STFT) e em técnicas de \textit{phase vocoder} \cite{dolson1986,flanagan1966}, que permitem analisar e modificar componentes do sinal no domínio das frequências.
+
+Entretanto, a implementação desses algoritmos em tempo real envolve desafios relacionados à reconstrução temporal do sinal, à preservação de coerência entre fases e às limitações impostas pelo processamento baseado em quadros.
+
+Este trabalho apresenta o desenvolvimento de um plugin de \textit{pitch shifting} em tempo real baseado em STFT e \textit{phase vocoder}. Inicialmente, são discutidos os fundamentos teóricos relacionados à STFT e ao \textit{phase vocoder}. Em seguida, são descritas as decisões de implementação adotadas no desenvolvimento do algoritmo e suas principais limitações práticas.
+
+
+

@@ -1,0 +1,9 @@
+\section{Conclusão}\label{sec:conclusao}
+
+Neste trabalho foi apresentada a implementação de um algoritmo de \textit{pitch shifting} em tempo real baseado em STFT e \textit{phase vocoder}. A abordagem adotada permitiu realizar deslocamentos de tom preservando a duração temporal do sinal processado.
+
+Ao longo do desenvolvimento, foram discutidos conceitos fundamentais relacionados à representação de sinais no domínio das frequências, à análise por quadros utilizando STFT e à estimação de frequências instantâneas por meio da evolução temporal das fases espectrais. Esses elementos foram utilizados na construção de uma implementação capaz de operar continuamente sobre sinais de áudio em tempo real no formato de um plugin VST.
+
+Os resultados obtidos demonstram que mesmo uma implementação relativamente direta de \textit{phase vocoder} é capaz de produzir transformações perceptivelmente coerentes para diferentes tipos de sinais de áudio. Entretanto, também foram observadas limitações conhecidas desse tipo de abordagem, especialmente em regiões transientes e em deslocamentos mais extremos de frequência.
+
+Diversas técnicas presentes na literatura buscam reduzir esses efeitos, incluindo métodos de \textit{phase locking}, rastreamento de picos espectrais (\textit{peak tracking}) e estratégias híbridas de síntese temporal e espectral. Dessa forma, o trabalho desenvolvido também estabelece uma base para futuras extensões e experimentações envolvendo algoritmos mais sofisticados de processamento digital de áudio.

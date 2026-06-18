@@ -1,5 +1,9 @@
 A simple real-time pitch shifter based on a phase vocoder. The signal is transformed into the frequency domain, spectral components are shifted by the desired number of semitones, and the audio is reconstructed using phase-coherent overlap-add synthesis.
 
+<video src="Assets/Videos/example.mp4" controls width="720">
+  Your browser does not support embedded videos. You can view the demo at `Assets/Videos/example.mp4`.
+</video>
+
 ### Dependencies
 
 + [JUCE](https://juce.com/)

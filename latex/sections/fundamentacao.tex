@@ -4,7 +4,7 @@
 
 Sinais de áudio são tradicionalmente representados no domínio do tempo, onde cada amostra descreve a amplitude do sinal em um determinado instante. Essa representação é adequada para captura, armazenamento e reprodução do áudio, mas nem sempre é a forma mais conveniente para analisar determinadas características do sinal ou realizar modificações específicas.
 
-Uma representação alternativa consiste em descrever o sinal no domínio das frequências. Nesse contexto, o sinal passa a ser interpretado como uma combinação de diversas componentes senoidais com diferentes amplitudes, frequências e fases \cite{oppenheim1999}. Essa abordagem permite identificar de maneira mais direta o conteúdo espectral presente no áudio e facilita operações relacionadas à manipulação de frequências.
+Uma representação alternativa consiste em descrever o sinal no domínio das frequências. Nesse contexto, o sinal passa a ser interpretado como uma combinação de diversas componentes senoidais com diferentes amplitudes, frequências e fases. Essa abordagem permite identificar de maneira mais direta o conteúdo espectral presente no áudio e facilita operações relacionadas à manipulação de frequências.
 
 Diversas técnicas de processamento digital de sinais utilizam representações espectrais para realizar tarefas como filtragem, remoção de ruído, análise de conteúdo harmônico e alteração de características como tom e timbre. No caso deste trabalho, a representação no domínio das frequências é particularmente relevante por permitir a implementação de algoritmos de \textit{pitch shifting}, nos quais as componentes espectrais do sinal são deslocadas de forma controlada para produzir alterações no tom percebido do som.
 
@@ -32,7 +32,7 @@ Embora a DFT forneça uma representação completa do conteúdo espectral de um 
 
 \subsection{Transformada Rápida de Fourier}
 
-A Transformada Rápida de Fourier (FFT, do inglês \textit{Fast Fourier Transform}) consiste em uma família de algoritmos capazes de calcular a DFT de forma mais eficiente. Diferentemente da DFT, que requer um número de operações proporcional a \(N^2\), algoritmos FFT reduzem essa complexidade para \(N \log_2 N\), tornando viável a análise espectral de sinais extensos e aplicações de processamento em tempo real.
+A Transformada Rápida de Fourier (FFT, do inglês \textit{Fast Fourier Transform}) consiste em uma família de algoritmos capazes de calcular a DFT de forma mais eficiente. Diferentemente da DFT, que requer um número de operações proporcional a \(N^2\), algoritmos FFT reduzem essa complexidade para \(N \log_2 N\), tornando viável a análise espectral de sinais extensos e aplicações de processamento em tempo real \cite{cooley1965}.
 
 A redução do custo computacional é obtida pela exploração de simetrias e redundâncias presentes nos coeficientes da DFT. Em particular, algoritmos do tipo Cooley-Tukey dividem recursivamente o problema original em transformadas menores, combinando posteriormente os resultados para obter o espectro completo do sinal.
 
@@ -44,7 +44,7 @@ A DFT fornece uma representação espectral de um conjunto finito de amostras. N
 
 Além disso, em aplicações de áudio em tempo real não é possível aguardar a captura completa do sinal antes de realizar seu processamento. Torna-se necessário analisar e transformar pequenas porções do áudio à medida que novas amostras são recebidas.
 
-A Transformada de Fourier de Curta Duração (STFT, do inglês \textit{Short-Time Fourier Transform}) baseia-se nesse princípio \cite{oppenheim1999}. O sinal é dividido em segmentos de curta duração, denominados quadros (\textit{frames}), e uma transformada é aplicada individualmente a cada um deles.
+A Transformada de Fourier de Curta Duração (STFT, do inglês \textit{Short-Time Fourier Transform}) baseia-se nesse princípio. O sinal é dividido em segmentos de curta duração, denominados quadros (\textit{frames}), e uma transformada é aplicada individualmente a cada um deles.
 
 O resultado é uma sequência de espectros capaz de descrever a evolução temporal das frequências que compõem o sinal, estabelecendo uma representação simultânea nos domínios do tempo e da frequência.
 
